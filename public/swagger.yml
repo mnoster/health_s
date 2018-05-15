@@ -1,0 +1,138 @@
+swagger: "2.0"
+info:
+  description: "DLS API"
+  version: "0.0.1"
+  title: "DLS API"
+  termsOfService: ""
+host: "dls-api.adchain.com"
+basePath: "/"
+tags:
+- name: "registry"
+  description: "DLS registry"
+schemes:
+- "https"
+paths:
+  /register:
+    get:
+      tags:
+      - "registry"
+      summary: "Register domain"
+      description: ""
+      produces:
+      - "application/json"
+      parameters:
+      - name: "domain"
+        in: "query"
+        type: "string"
+        description: "register domain"
+        required: true
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            items:
+              type: "string"
+            example:
+              message: "Domain registered"
+        400:
+          description: "Invalid DNS TXT record check"
+          schema:
+            type: "object"
+            example:
+              error: "DNS TXT record with public key was not found"
+  /publisher:
+    get:
+      tags:
+      - "registry"
+      summary: "Publisher data"
+      description: "Return array of domains registered to publisher key (wallet address)"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "address"
+        in: "query"
+        type: "string"
+        description: "publisher wallet address"
+        required: true
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            items:
+              type: "array"
+            example:
+              domains: ['mydomain.com']
+        400:
+          description: "Invalid public key address"
+          schema:
+            type: "object"
+            example:
+              error: "invalid public key address"            
+  /seller:
+    get:
+      tags:
+      - "registry"
+      summary: "Check if publisher domain has a seller"
+      description: "Get"
+      produces:
+      - "application/data"
+      parameters:
+      - name: "domain"
+        in: "query"
+        description: "publisher domain"
+        required: true
+        type: "string"
+      - name: "seller_domain"
+        in: "query"
+        description: "seller domain"
+        required: true
+        type: string
+      - name: "seller_id"
+        in: "query"
+        description: "seller id"
+        required: true
+        type: string
+      - name: "seller_rel"
+        in: "query"
+        description: "seller relationship"
+        required: true
+        type: string
+      - name: "cert_id"
+        in: "query"
+        description: "certificate authority id"
+        required: true
+        type: string
+      - name: "format"
+        in: "query"
+        description: "media format"
+        required: true
+        type: string
+      - name: "region"
+        in: "query"
+        description: "region"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "oject"
+            items:
+              type: "string"
+            example:
+              domain: "google.com"
+              id: 4
+              relationship: "direct"
+              tagId: 1234
+              hash: "0xfda446403d30f2bb15bf0f6e6a453eb8c51242c96883275950401463830444fd"
+        400:
+          description: "Error"
+          schema:
+            type: "object"
+            example:
+              error: "Not a seller"
+externalDocs:
+  description: "Find out more about DLS Server"
+  url: "https://github.com/AdChain/DLS-Server"
